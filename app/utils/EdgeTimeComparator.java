@@ -2,15 +2,15 @@ package app.utils;
 
 import java.util.Comparator;
 
-import app.graph.Edge;
+import app.graph.Source;
 
-public class EdgeTimeComparator implements Comparator<Edge>{
+public class EdgeTimeComparator implements Comparator<Source> {
 
     @Override
-    public int compare(Edge first, Edge second) {
+    public int compare(Source first, Source second) {
         if (first.getTime() > second.getTime())
             return 1;
-        else if (first.getTime()< second.getTime())
+        else if (first.getTime() < second.getTime())
             return -1;
         return 0;
     }

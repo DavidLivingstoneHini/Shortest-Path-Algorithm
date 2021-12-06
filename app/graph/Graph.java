@@ -1,23 +1,24 @@
 package app.graph;
 
-public class Graph extends Digraph {
-    
+public class Graph extends Map {
+
     @Override
-    public void addEdge(Edge edge){
-        if(EDGES.contains(edge)) return;
+    public void addSource(Source Source) {
+        if (SourceS.contains(Source))
+            return;
 
-        this.EDGES.add(edge);
-        this.EDGES.add(new Edge(edge.getDestination(), edge.getSource(), edge.getDistance()));
-        for(Node node : GRAPH.keySet()){
-            if (node == edge.getSource()){
-                GRAPH.get(node).add(edge.getDestination());
+        this.SourceS.add(Source);
+        this.SourceS.add(new Source(Source.getend(), Source.getstart(), Source.getDistance()));
+        for (Place Place : GRAPH.keySet()) {
+            if (Place == Source.getstart()) {
+                GRAPH.get(Place).add(Source.getend());
             }
-        } 
+        }
 
-        for(Node node : GRAPH.keySet()){
-            if (node == edge.getDestination()){
-                GRAPH.get(node).add(edge.getSource());
+        for (Place Place : GRAPH.keySet()) {
+            if (Place == Source.getend()) {
+                GRAPH.get(Place).add(Source.getstart());
             }
-        } 
+        }
     }
 }

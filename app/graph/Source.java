@@ -2,37 +2,37 @@ package app.graph;
 
 import java.util.ArrayList;
 
-public class Edge implements Comparable<Edge> {
-    private Node source;
-    private Node destination;
+public class Source implements Comparable<Source> {
+    private Place start;
+    private Place end;
     private long time;
     private int distance;
     private ArrayList<String> landMarks = new ArrayList<>();
 
-    public Edge(Node source, Node destination, int distance) {
-        this.source = source;
-        this.destination = destination;
+    public Source(Place start, Place end, int distance) {
+        this.start = start;
+        this.end = end;
         this.distance = distance;
         this.time = -1;
     }
 
-    public Edge(Node source, Node destination, int distance, long time) {
-        this.source = source;
-        this.destination = destination;
+    public Source(Place start, Place end, int distance, long time) {
+        this.start = start;
+        this.end = end;
         this.distance = distance;
         this.time = time;
     }
 
-    public Node getDestination() {
-        return destination;
+    public Place getend() {
+        return end;
     }
 
-    public ArrayList<String> getLandMarksNode() {
+    public ArrayList<String> getLandMarksPlace() {
         return landMarks;
     }
 
-    public Node getSource() {
-        return source;
+    public Place getstart() {
+        return start;
     }
 
     public int getDistance() {
@@ -45,11 +45,11 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public String toString() {
-        return source.getName() + " --> " + destination.getName() + " " + getDistance();
+        return start.getName() + " --> " + end.getName() + " " + getDistance();
     }
 
     @Override
-    public int compareTo(Edge other) {
+    public int compareTo(Source other) {
         if (getDistance() > other.getDistance())
             return 1;
         else if (getDistance() < other.getDistance())

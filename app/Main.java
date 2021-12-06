@@ -1,76 +1,138 @@
 package app;
 
-import java.util.Scanner;
+import javax.swing.*;
 
-import app.algorithms.Dijkstra;
-import app.graph.Digraph;
-import app.graph.Edge;
-import app.graph.Node;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import app.algorithms.Algo2;
+import app.algorithms.CPM_519;
+import app.algorithms.Vogels;
+import app.graph.Source;
+import app.graph.Graph;
+import app.graph.Place;
 
 public class Main {
-    private static final Scanner scanner = new Scanner(System.in);
-
-    public static Digraph addNodes(Node[] nodes){
-        Digraph graph = new Digraph();
-        for (Node node : nodes) {
-            graph.addNode(node);
-        }
-        return graph;
-    }
-
     public static void main(String[] args) {
-        Node a = new Node("Great Hall");
-        Node b = new Node("Commonwealth Hall");
-        Node c = new Node("Balme Library");
-        Node d = new Node("JQB");
-        Node e = new Node("Main Gate");
-        Node f = new Node("Banking Square");
-        Node g = new Node("CC");
-        Node h = new Node("Sarbah Field");
-        Node i = new Node("Night Market");
-        Node j = new Node("Diaspora");
-        Node nodes[] = {a,b,c,d,e,f,g,h,i,j};
+        Graph graph = new Graph();
+        Place A = new Place("Great Hall");
+        Place B = new Place("Commonwealth Hall");
+        Place C = new Place("Balme Library");
+        Place D = new Place("JQB");
+        Place E = new Place("Main Gate");
+        Place F = new Place("Banking Square");
+        Place G = new Place("CC");
+        Place H = new Place("Sarbah Field");
+        Place I = new Place("Night Market");
+        Place J = new Place("Diaspora");
 
-        Digraph graph = addNodes(nodes);
+        // Places added to the map
+        graph.addPlace(A);
+        graph.addPlace(B);
+        graph.addPlace(C);
+        graph.addPlace(D);
+        graph.addPlace(E);
+        graph.addPlace(F);
+        graph.addPlace(G);
+        graph.addPlace(H);
+        graph.addPlace(I);
+        graph.addPlace(J);
 
-        graph.addEdge(new Edge(a, b, 1));
-        graph.addEdge(new Edge(b, c, 1));
-        graph.addEdge(new Edge(c, d, 2));
+        graph.addSource(new Source(A, B, 190));
+        graph.addSource(new Source(B, C, 750));
+        graph.addSource(new Source(C, D, 900));
 
-        graph.addEdge(new Edge(e, d, 1));
-        graph.addEdge(new Edge(d, e, 1));
-        graph.addEdge(new Edge(e, f, 3));
-        graph.addEdge(new Edge(f, e, 3));
+        graph.addSource(new Source(E, D, 600));
+        graph.addSource(new Source(D, E, 600));
+        graph.addSource(new Source(E, F, 1400));
+        graph.addSource(new Source(F, E, 1400));
 
-        graph.addEdge(new Edge(b, h, 2));
-        graph.addEdge(new Edge(h, b, 2));
-        graph.addEdge(new Edge(b, g, 1));
-        graph.addEdge(new Edge(g, b, 1));
-        graph.addEdge(new Edge(c, g, 2));
-        graph.addEdge(new Edge(g, c, 2));
+        graph.addSource(new Source(B, H, 1100));
+        graph.addSource(new Source(H, B, 1100));
+        graph.addSource(new Source(B, G, 700));
+        graph.addSource(new Source(G, B, 700));
+        graph.addSource(new Source(C, G, 800));
+        graph.addSource(new Source(G, C, 800));
 
-        graph.addEdge(new Edge(g, f, 3));
-        graph.addEdge(new Edge(f, g, 3));
-        graph.addEdge(new Edge(g, h, 2));
-        graph.addEdge(new Edge(h, g, 2));
+        graph.addSource(new Source(G, F, 1000));
+        graph.addSource(new Source(F, G, 1000));
+        graph.addSource(new Source(G, H, 600));
+        graph.addSource(new Source(H, G, 600));
 
-        graph.addEdge(new Edge(h, i, 3));
-        graph.addEdge(new Edge(i, h, 3));
-        graph.addEdge(new Edge(f, i, 1));
-        graph.addEdge(new Edge(i, f, 1));
+        graph.addSource(new Source(H, I, 1100));
+        graph.addSource(new Source(I, H, 1100));
+        graph.addSource(new Source(F, I, 1900));
+        graph.addSource(new Source(I, F, 190));
 
-        graph.addEdge(new Edge(i, j, 2));
-        graph.addEdge(new Edge(j, i, 2));
+        graph.addSource(new Source(I, J, 800));
+        graph.addSource(new Source(J, I, 800));
 
-        System.out.println("Please choose your current location:");
+        // asking the user for current location
+        System.out.println("Choose Starting Point:");
         graph.listPlaces(null);
 
-        String place = scanner.nextLine();
-        Node source = graph.getNodeByName(place);
+        // The User interface
+        String places[] = { "Great Hall", "Commonwealth Hall", "Balme Library", "JQB", "Main Gate", "Banking Square",
+                "CC", "Sarbah Field", "Night Market", "Diaspora" };
 
-        System.out.println("\nPlease choose your destination:");
-        String place2 = scanner.nextLine();
-        Node destination = graph.getNodeByName(place2);
-        Dijkstra.findShortestPath(graph, source, destination);
+        JFrame frame = new JFrame();// creating instance of JFrame
+
+        JComboBox startCombo = new JComboBox(places);
+        startCombo.setBounds(500, 50, 200, 20);
+        frame.add(startCombo);// adding button in JFrame
+
+        JComboBox endCombo = new JComboBox(places);
+        endCombo.setBounds(500, 100, 200, 20);
+        frame.add(endCombo);// adding button in JFrame
+
+        JLabel info = new JLabel();
+        info.setText("Best Route: ");
+        info.setBounds(500, 200, 150, 40);
+        frame.add(info);
+
+        frame.getContentPane().setBackground(Color.pink);
+
+        JLabel shortestPathDisplay = new JLabel();
+        shortestPathDisplay.setBounds(500, 220, 400, 40);
+        frame.add(shortestPathDisplay);
+
+        JLabel distanceDisplay = new JLabel();
+        distanceDisplay.setBounds(500, 240, 400, 40);
+        frame.add(distanceDisplay);
+
+        JLabel timeDisplay = new JLabel();
+        timeDisplay.setBounds(500, 260, 400, 40);
+        frame.add(timeDisplay);
+
+        JButton button = new JButton("Get Direction");
+        button.setBounds(500, 150, 150, 40);
+        frame.add(button);
+        button.setBackground(Color.black);
+        button.setForeground(Color.white);
+
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String theOrigin = startCombo.getSelectedItem().toString();
+                String theEnd = endCombo.getSelectedItem().toString();
+
+                Place start = graph.getPlaceByName(theOrigin);
+                Place end = graph.getPlaceByName(theEnd);
+
+                Algo2.findShortestPath(graph, start, end);
+                String path = Algo2.getShortestPath(start, end);
+                shortestPathDisplay.setText(path);
+
+                distanceDisplay.setText("Estimated Distance of Travel: " + Algo2.getTotalDistance(end));
+                String name = "D";
+                timeDisplay.setText("Estimated Travel Time: " + Algo2.getTime(end));
+            }
+        });
+
+        // Display
+        frame.setSize(1200, 800);
+        frame.setLayout(null);
+        frame.setVisible(true);
+
     }
 }
